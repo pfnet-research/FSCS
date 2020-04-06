@@ -8,7 +8,7 @@ class MyDataset(Dataset):
     def __init__(self, csv_path, num_primary_color, mode=None):
         self.csv_path = csv_path
         if mode == 'train':
-            self.imgs_path = np.array(pd.read_csv(csv_path, header=None)).reshape(-1)[:-10]
+            self.imgs_path = np.array(pd.read_csv(csv_path, header=None)).reshape(-1)[:-10] #csvリストの後ろをvaldataに
             self.palette_list = np.array(pd.read_csv('palette_%d_%s' % (num_primary_color, csv_path), header=None)).reshape(-1, num_primary_color*3)[:-10]
         if mode == 'val':
             self.imgs_path = np.array(pd.read_csv(csv_path, header=None)).reshape(-1)[-10:]

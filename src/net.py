@@ -4,51 +4,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class ColorRegresser(nn.Module):
-    def __init__(self, num_primary_color):
-        super(ColorRegresser, self).__init__()
-        in_dim = 3 # input: target_img ( bn, 3ch, h, w )
-        out_dim = num_primary_color * 3  # primary_color_layersと同じものが出力になる bn, ln, 3, h, w
-        self.num_primary_color = num_primary_color
-
-        self.conv1 = nn.Conv2d(in_dim, in_dim * 4, kernel_size=3, stride=2, padding=1, bias=False)
-        self.conv2 = nn.Conv2d(in_dim * 4, in_dim * 16, kernel_size=3, stride=2, padding=1, bias=False)
-        self.conv3 = nn.Conv2d(in_dim * 16, in_dim * 64, kernel_size=3, stride=2, padding=1, bias=False)
-
-        self.bn1 = nn.BatchNorm2d(in_dim * 4)
-        self.bn2 = nn.BatchNorm2d(in_dim * 16)
-        self.bn3 = nn.BatchNorm2d(in_dim * 64)
-
-        self.fc1 = nn.Linear(in_dim * 64, in_dim * 32)
-        self.fc2 = nn.Linear(in_dim * 32, in_dim * 16)
-        self.fc3 = nn.Linear(in_dim * 16, num_primary_color * 64 * 64)
-
-    def forward(self, target_img):
-        resized = F.adaptive_avg_pool2d(target_img, (64, 64))
-        h = self.bn1(F.relu(self.conv1(resized)))
-        h = self.bn2(F.relu(self.conv2(h)))
-        h = self.bn3(F.relu(self.conv3(h)))
-        h = F.adaptive_avg_pool2d(h, (1,1)).view(h.size(0), -1) # bn, in_dim * 8
-        h = F.relu(self.fc1(h))
-        h = F.relu(self.fc2(h))
-        out = self.fc3(h).view(-1, self.num_primary_color, 64*64) #ln x HW
-        out = F.softmax(out, dim=2)
-
-
-        resized = resized.view(-1, 3, 64*64).permute(0,2,1) # bn, hw, 3
-
-        out = torch.bmm(out, resized) # bn, ln, 3
-
-        out = out.view(-1, self.num_primary_color, 3, 1, 1) * torch.ones_like(target_img).unsqueeze(1)
-
-        # 0~1の範囲でクリップした方が良いかもしれない
-        out = torch.clamp(out, min=0., max=1.)
-
-
-        return out
-
-
-
 class MaskGenerator(nn.Module):
 
     def __init__(self, num_primary_color):
