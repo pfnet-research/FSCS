@@ -1,5 +1,5 @@
 # Fast Soft Color Segmentation
-This repository was developed as a part of an internship in the summer of 2019.
+This repository was developed as a part of an internship at Preferred Networks in the summer of 2019.
 
 ![TeaserImage](./teaser.jpg)
 
