@@ -1,7 +1,12 @@
 # Fast Soft Color Segmentation
+* [Paper Link](https://arxiv.org/abs/2004.08096) 
+* [Supplimentary Video](https://www.youtube.com/watch?v=chWdaOramB0&feature=youtu.be)
+
 This repository was developed as a part of an internship at Preferred Networks in the summer of 2019.
 
+
 ![TeaserImage](./teaser.jpg)
+
 
 ## Usage
 ### Training
@@ -24,3 +29,13 @@ img_name = 'apple.jpg'; manual_color_0 = [253, 253, 254]; manual_color_1 = [203,
 - This is developed on a Linux machine running Ubuntu 16.04
 - Distributed pretrained model is for 7 layer decomposition.
 - The copyright of apple.jpg belongs to [Adelle Chudleigh](https://www.deviantart.com/gothicwolfcorpse).
+
+```
+@InProceedings{Akimoto_2020_CVPR,
+author = {Akimoto, Naofumi and Zhu, Huachun and Jin, Yanghua and Aoki, Yoshimitsu},
+title = {Fast Soft Color Segmentation},
+booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+month = {June},
+year = {2020}
+}
+```
